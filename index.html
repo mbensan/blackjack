@@ -34,6 +34,11 @@
 			.subrayado {
 				text-decoration: line-through;
 			}
+			#puntaje {
+				font-size: 25pt;
+				font-weight: 600;
+				text-align: center;
+			}
 			.jumbotron {
 				height: 400px;
   		  background-color: #04B431;
@@ -70,9 +75,10 @@
 				<div class="col-md-2 col-sm-1">
 					<div class="card">
 						<div class="card-header">
-							<p></p>
+							PUNTAJE
 						</div>
 						<div class="card-body">
+							<p id="puntaje"></p>
 						</div>
 					</div>
 				</div>
@@ -129,7 +135,6 @@
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 	<script src="deck.min.js"></script>
 	<script>
-
 		function valor_carta(carta) {
 			if (carta.rank == 'ace') {
 				return 11;
@@ -141,17 +146,30 @@
 		}
 		
 		// Una mano es perdedora si todas sus posibilidades son perdedoras
-		function verificar_si_pierde(mano) {
-			var puntaje_parcial = 0;
-			for (var i=0; i<mano.length; i++) {
+		function obtener_puntaje(mano) {
+			let puntaje_parcial = 0;
+			let aces = 0;
+			for (let i=0; i<mano.length; i++) {
 				puntaje_parcial = puntaje_parcial + valor_carta(mano[i]);
+				if (mano[i].rank == "ace") {
+					aces++;
+				}
 			}
 
 			if (puntaje_parcial <= 21) {
-				return false; // jugador aun no pierde
-			} else {
-				return true; // jugador ya perdió
+				return puntaje_parcial;
 			}
+			// En este punto, me pase poh!
+			// chequear si tengo Ace's
+			while (aces > 0) {
+				puntaje_parcial = puntaje_parcial - 10;
+				aces--;
+				if (puntaje_parcial <= 21) {
+					return puntaje_parcial;
+				}
+			}
+			
+			return puntaje_parcial;
 		}
 
 		/*
@@ -164,7 +182,8 @@
 			var parrafo = '';
 			if (carta.rank == 'ace' || carta.rank == 'king' ||
 			 		carta.rank == 'queen' || carta.rank == 'jack') {
-				parrafo = '<p>' + carta.rank[0].toUpperCase() + '</p>';
+				//parrafo = '<p>' + carta.rank[0].toUpperCase() + '</p>';
+				parrafo = `<p>${carta.rank[0].toUpperCase()}</p>`;
 			} else {
 				parrafo = `<p>${carta.rank}</p>`;
 			}
@@ -198,22 +217,30 @@
 			// agregar cartas iniciales a la mesa
 			dibujar_carta(carta1);
 			dibujar_carta(carta2);
+
+			const puntaje = obtener_puntaje(mano);
+			$('#puntaje').html(puntaje);
 		}
 		iniciar_juego();
 
 		// robar carta
 		$('#robar-carta').on('click', function() {
-			// sacar carta nueva del maso
-			var carta_nueva = deck.draw();
+			// sacar carta nueva del mazo
+			const carta_nueva = deck.draw();
 			// meterla a la mano
 			mano.push(carta_nueva);
 			// dibujar carta nueva
 			dibujar_carta(carta_nueva);
+			// actualizar el puntaje
+			const puntaje = obtener_puntaje(mano);
+			$('#puntaje').html(puntaje);
 
 			// chequear si perdió el jugador
-			if (verificar_si_pierde(mano)) {
+			if (puntaje > 21) {
 				alert('Perdiste el juego');
 			}
 		});
+		
+		
 	</script>
 </html>

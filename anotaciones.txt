@@ -3,3 +3,9 @@ A-Treb, 7-Diam, 5-Diam
 
 Siempre que robe una carta nueva,
 voy a calcular todas las posibilidades, a ver si alguna no pierde
+
+DESAFIO:
+1. Actualizar el puntaje en el DOM
+2. Botón para reiniciar el Juego
+3. Hacer jugar al croupier
+4. Validar Blackjack
