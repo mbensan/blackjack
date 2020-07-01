@@ -122,9 +122,6 @@
 							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
-					<div class="modal-body">
-						Felicidades al Jugador <span id="jugador-ganador">O</span> por ganar.
-					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 						<button type="button" class="btn btn-primary">Understood</button>
@@ -223,6 +220,12 @@
 
 			const puntaje = obtener_puntaje(mano);
 			$('#puntaje').html(puntaje);
+			
+			// comprobar si tenemos blackjack
+			if (puntaje == 21) {
+				$('.modal-title').html('BlackJack!!!');
+				$('#modal-ganador').modal();
+			}
 		}
 		iniciar_juego();
 
@@ -240,7 +243,8 @@
 
 			// chequear si perdió el jugador
 			if (puntaje > 21) {
-				alert('Perdiste el juego');
+				$('.modal-title').html('Perdiste el juego');
+				$('#modal-ganador').modal();
 			}
 		});
 		
