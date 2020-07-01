@@ -104,6 +104,9 @@
 						<div class="card-body">
 							<button type="button" class="btn btn-warning btn-block">Plantarse</button>
 						</div>
+						<div class="card-body">
+							<button type="button" id="reiniciar" class="btn btn-success">Reiniciar</button>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -241,6 +244,55 @@
 			}
 		});
 		
+		$('#reiniciar').on('click', function() {
+			deck.shuffle();
+			mano = [];
+			$('.jumbotron').html('');
+			iniciar_juego();
+		});	
+		
+		function datos_pokemon(id=25) {
+
+			$.ajax({
+				url: `https://pokeapi.co/api/v2/pokemon/${id}/`,
+				type: 'json',
+				method: 'GET',
+				complete: function(data) {
+					const pokemon = data.responseJSON;
+					const nombre = pokemon.name;
+					const tipos = pokemon.types;
+					
+					console.log(`El nombre del pokemon es ${nombre}`);
+					console.log('Sus tipos son:');
+					for (let tipo of tipos) {
+						console.log(tipo.type.name);
+					}
+				}
+			});
+		}
+
+		function getDistanciaInacap(posicion={lng: -33.437647, lat:-70.650447}){
+			const inacap_valpo = {lng: -33.032554, lat: -71.589167};
+
+			const diff_lng = Math.abs(posicion.lng - inacap_valpo.lng);
+			const diff_lat = Math.abs(posicion.lat - inacap_valpo.lat);
+
+			console.log(`El usuario se encuentra a longitud de ${diff_lng}`);
+			console.log(`El usuario se encuentra a latitud de ${diff_lat}`);
+		}
+	
+
+		var skill = 'run';
+		var skillDescription = 'I like running';
+		var name = 'forrest';
+		var height = '5ft 8in';
+		var email = 'forrest@gump.com';
+		var forrest = {
+			name: name,
+			email: email,
+			height: height,
+		};
+		forrest[skill] = skillDescription;
 		
 	</script>
 </html>
